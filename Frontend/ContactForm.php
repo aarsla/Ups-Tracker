@@ -157,6 +157,7 @@ class ContactForm
 
                 // Process the data.
                 $response = UPSTracker::getUpsTracking($inquiryNumber);
+//                $response = UPSTracker::testFixture('1Z12345E0205271688');
 
                 if ($response['Fault']) {
                     $faultResponse = $response['Fault'];
@@ -243,6 +244,10 @@ class ContactForm
                 $html .= '<tr>';
                 $html .= '<td colspan="2"><strong>Activities</strong></td>';
                 $html .= '</tr>';
+
+                foreach($package['Activity'] as $key=>$value){
+                    echo $key . "=>" . $value . "<br>";
+                }
 
                 foreach ($package['Activity'] as $activity) {
                     $html .= '<tr>';

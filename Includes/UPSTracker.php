@@ -23,7 +23,14 @@ class UPSTracker
         $jsonEncodedParams = json_encode($params);
 
         $response = UPSTracker::sendRequest($jsonEncodedParams);
-        $decodedResponse = json_decode($response, true);
+        $decodedResponse = json_decode($response, true, 512,  JSON_OBJECT_AS_ARRAY);
+
+        return $decodedResponse;
+    }
+
+    public static function testFixture(string $fixtureName) {
+        $response = file_get_contents(dirname(__FILE__).'/../Fixtures/'.$fixtureName.'.json', true);
+        $decodedResponse = json_decode($response, true, 512,  JSON_OBJECT_AS_ARRAY);
 
         return $decodedResponse;
     }
