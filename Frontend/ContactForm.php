@@ -158,9 +158,12 @@ class ContactForm
                 $inquiryNumber = $_POST["inquiryNumber"];
 
                 // Process the data.
-//                $response = UPSTracker::getUpsTracking($inquiryNumber);
-                $response = UPSTracker::testFixture($inquiryNumber);
-                $upsResponse = UPS::fromJsonString($response);
+                $response = UPSTracker::getUpsTracking($inquiryNumber);
+
+                // Testing fixtures
+                // $response = UPSTracker::testFixture($inquiryNumber);
+
+                $upsResponse = UPS::fromArray($response);
 
                 if ($upsResponse->getFault()) {
                     $formattedResponse = $this->formatErrorResponse($upsResponse);

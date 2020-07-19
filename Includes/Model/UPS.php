@@ -10,7 +10,6 @@ final class UPS
 {
     private ResponseStatus $responseStatus;
     private Shipment $shipment;
-//    private array $packages;
     private ?string $disclaimer;
     private ?ResponseStatus $fault = null;
 
@@ -29,15 +28,6 @@ final class UPS
 
         $this->responseStatus = ResponseStatus::fromResponse($trackResponse['Response']['ResponseStatus']);
         $this->shipment = Shipment::fromResponse($trackResponse['Shipment']);
-//
-//        $this->packages = $this->repackPackages($trackResponse['Shipment']['Package']);
-//
-//        if (gettype($trackResponse['Shipment']['Package']) === 'array') {
-//            foreach ($trackResponse['Shipment']['Package'] as $package) {
-//
-//            }
-//        }
-
         $this->disclaimer = $trackResponse['Disclaimer'] ?: null;
     }
 
@@ -46,8 +36,8 @@ final class UPS
         return new UPS($decodedResponse);
     }
 
-    private function repackPackages($packages): array {
-
+    public static function fromArray(array $response): UPS {
+        return new UPS($response);
     }
 
     /**
