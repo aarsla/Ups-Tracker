@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace UpsTracking\Includes\Model;
+namespace UpsTracking\Includes\Model\Shipment;
 
-final class CurrentStatus
+final class Service
 {
     private string $code;
     private string $description;
@@ -15,15 +15,20 @@ final class CurrentStatus
         $this->description = $description;
     }
 
-    public static function fromArray(?array $currentStatus): ?CurrentStatus {
-        if (!is_array($currentStatus)) {
+    public static function fromNullableArray(?array $service): ?Service
+    {
+        if (!is_array($service)) {
             return null;
         }
 
-        $code = $currentStatus['Code'];
-        $description = $currentStatus['Description'];
+        return Service::fromArray($service);
+    }
 
-        return new CurrentStatus($code, $description);
+    private static function fromArray(array $service): ?Service {
+        $code = $service['Code'];
+        $description = $service['Description'];
+
+        return new Service($code, $description);
     }
 
     /**

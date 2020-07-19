@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UpsTracking\Frontend;
 
 // If this file is called directly, abort.
+use UpsTracking\Includes\Model\Activity\Activity;
 use UpsTracking\Includes\Model\UPS;
 use UpsTracking\Includes\UPSTracker;
 
@@ -179,7 +180,7 @@ class ContactForm
 
     private function formatResponse(UPS $upsResponse): string
     {
-        $html = '<table>';
+        $html = '<table class="ups-results">';
 
 //        $shipment = $upsResponse->getShipment();
 //        $packages = $upsResponse->getPackages();
@@ -190,8 +191,8 @@ class ContactForm
         $html .= '</tr>';
 
         $html .= '<tr>';
-        $html .= '<td>Status</td>';
-        $html .= '<td>Code: '. $upsResponse->getResponseStatus()->getCode().' - '.$upsResponse->getResponseStatus()->getDescription().'</td>';
+        $html .= '<td>Code '. $upsResponse->getResponseStatus()->getCode().'</td>';
+        $html .= '<td>'.$upsResponse->getResponseStatus()->getDescription().'</td>';
         $html .= '</tr>';
 
         // Shipment
@@ -203,8 +204,17 @@ class ContactForm
             $shipmentType = $upsResponse->getShipment()->getShipmentType();
 
             $html .= '<tr>';
-            $html .= '<td>Shipment type</td>';
+            $html .= '<td>Type</td>';
             $html .= '<td>'.$shipmentType->getDescription().'</td>';
+            $html .= '</tr>';
+        }
+
+        if ($upsResponse->getShipment()->getShipmentWeight()) {
+            $shipmentWeight = $upsResponse->getShipment()->getShipmentWeight();
+
+            $html .= '<tr>';
+            $html .= '<td>Weight</td>';
+            $html .= '<td>'.$shipmentWeight->getWeight().' '.$shipmentWeight->getUnitOfMeasurement().'</td>';
             $html .= '</tr>';
         }
 
@@ -212,10 +222,29 @@ class ContactForm
             $currentStatus = $upsResponse->getShipment()->getCurrentStatus();
 
             $html .= '<tr>';
-            $html .= '<td>Current status</td>';
+            $html .= '<td>Status</td>';
             $html .= '<td>'.$currentStatus->getDescription().'</td>';
             $html .= '</tr>';
         }
+
+        if ($upsResponse->getShipment()->getPickupDate()) {
+            $pickupDate = $upsResponse->getShipment()->getPickupDate();
+
+            $html .= '<tr>';
+            $html .= '<td>Pickup Date</td>';
+            $html .= '<td>'.$pickupDate.'</td>';
+            $html .= '</tr>';
+        }
+
+        if ($upsResponse->getShipment()->getService()) {
+            $service = $upsResponse->getShipment()->getService();
+
+            $html .= '<tr>';
+            $html .= '<td>Service '.$service->getCode().'</td>';
+            $html .= '<td>'.$service->getDescription().'</td>';
+            $html .= '</tr>';
+        }
+
 //
 //        $html .= '<tr>';
 //        $html .= '<td>Shipper number</td>';
@@ -231,13 +260,47 @@ class ContactForm
 //        $html .= '<td>Shipment reference number</td>';
 //        $html .= '<td>'.$shipment['ReferenceNumber']['Value'].'</td>';
 //        $html .= '</tr>';
-//
-//        $html .= '<tr>';
-//        $html .= '<td>Pickup date</td>';
-//        $html .= '<td>'.$shipment['PickupDate'].'</td>';
-//        $html .= '</tr>';
-//
-//        // Package
+
+        // Package
+        if ($upsResponse->getShipment()->getPackage()) {
+            $html .= '<tr>';
+            $html .= '<td colspan="2"><strong>Package</strong></td>';
+            $html .= '</tr>';
+
+            $package = $upsResponse->getShipment()->getPackage();
+
+            $html .= '<tr>';
+            $html .= '<td>Tracking Number</td>';
+            $html .= '<td>'.$package->getTrackingNumber().'</td>';
+            $html .= '</tr>';
+
+            if ($upsResponse->getShipment()->getPackage()->getActivities()) {
+                $activities = $upsResponse->getShipment()->getPackage()->getActivities();
+
+                $html .= '<tr>';
+                $html .= '<td colspan="2">';
+
+                $html .= '<table class="ups-package-activities">';
+                $html .= '<tr>';
+                $html .= '<td>Date</td><td>Time</td><td>Description</td>';
+                $html .= '</tr>';
+
+                foreach ($activities as $activity) {
+                    $html .= '<tr>';
+                    $html .= '<td>' . $activity->getDate() . '</td>';
+                    $html .= '<td>' . $activity->getTime() . '</td>';
+                    $html .= '<td>' . $activity->getStatus()->getDescription() . '</td>';
+                    $html .= '</tr>';
+                }
+
+                $html .= '</table>';
+
+                $html .= '</td>';
+                $html .= '</tr>';
+
+            }
+        }
+
 //        foreach ($packages as $package) {
 //
 //            $html .= '<tr>';

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace UpsTracking\Includes\Model;
 
+use UpsTracking\Includes\Model\Shipment\Shipment;
+
 final class UPS
 {
     private ResponseStatus $responseStatus;

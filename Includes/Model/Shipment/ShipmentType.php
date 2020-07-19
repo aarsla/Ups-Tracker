@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UpsTracking\Includes\Model;
+namespace UpsTracking\Includes\Model\Shipment;
 
 final class ShipmentType
 {
@@ -15,11 +15,16 @@ final class ShipmentType
         $this->description = $description;
     }
 
-    public static function fromArray(?array $shipmentType): ?ShipmentType {
+    public static function fromNullableArray(?array $shipmentType): ?ShipmentType
+    {
         if (!is_array($shipmentType)) {
             return null;
         }
 
+        return ShipmentType::fromArray($shipmentType);
+    }
+
+    private static function fromArray(array $shipmentType): ?ShipmentType {
         $code = $shipmentType['Code'];
         $description = $shipmentType['Description'];
 
