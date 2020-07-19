@@ -17,13 +17,23 @@ final class Package
         $this->activities = $activities;
     }
 
-    public static function fromNullableArray(?array $package): ?Package
+    public static function fromNullableArray(?array $packages): ?array
     {
-        if (!is_array($package)) {
+        if (!is_array($packages)) {
             return null;
         }
 
-        return Package::fromArray($package);
+        $array = [];
+
+        if (isset($packages[0])) {
+            foreach ($packages as $package) {
+                $array[] = Package::fromArray($package);
+            }
+        } else {
+            $array[] = Package::fromArray($packages);
+        }
+
+        return empty($array) ? null : $array;
     }
 
     private static function fromArray(array $package): Package {

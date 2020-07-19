@@ -12,7 +12,7 @@ final class Shipment
     private ?ShipmentWeight $shipmentWeight;
     private ?string $pickupDate;
     private ?Service $service;
-    private ?Package $package;
+    private ?array $packages;
 
     private function __construct(
         InquiryNumber $inquiryNumber,
@@ -21,7 +21,7 @@ final class Shipment
         ?ShipmentWeight $shipmentWeight,
         ?string $pickupDate,
         ?Service $service,
-        ?Package $package
+        ?array $packages
     )
     {
         $this->inquiryNumber = $inquiryNumber;
@@ -30,7 +30,7 @@ final class Shipment
         $this->shipmentWeight = $shipmentWeight;
         $this->pickupDate = $pickupDate;
         $this->service = $service;
-        $this->package = $package;
+        $this->packages = $packages;
     }
 
     public static function fromResponse(array $shipping): Shipment {
@@ -40,7 +40,7 @@ final class Shipment
         $shipmentWeight = ShipmentWeight::fromNullableArray(Shipment::arrayOrNull($shipping, 'ShipmentWeight'));
         $pickupDate = Shipment::valueOrNull($shipping, 'PickupDate');
         $service = Service::fromNullableArray(Shipment::arrayOrNull($shipping, 'Service'));
-        $package = Package::fromNullableArray(Shipment::arrayOrNull($shipping, 'Package'));
+        $packages = Package::fromNullableArray(Shipment::arrayOrNull($shipping, 'Package'));
 
         return new Shipment(
             $inquiryNumber,
@@ -49,7 +49,7 @@ final class Shipment
             $shipmentWeight,
             $pickupDate,
             $service,
-            $package
+            $packages
         );
     }
 
@@ -127,11 +127,11 @@ final class Shipment
     }
 
     /**
-     * @return Package|null
+     * @return Package[]|null
      */
-    public function getPackage(): ?Package
+    public function getPackages(): ?array
     {
-        return $this->package;
+        return $this->packages;
     }
 
 }

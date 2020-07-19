@@ -182,9 +182,6 @@ class ContactForm
     {
         $html = '<table class="ups-results">';
 
-//        $shipment = $upsResponse->getShipment();
-//        $packages = $upsResponse->getPackages();
-
         // Response
         $html .= '<tr>';
         $html .= '<td colspan="2"><strong>Status</strong></td>';
@@ -200,8 +197,10 @@ class ContactForm
         $html .= '<td colspan="2"><strong>Shipment</strong></td>';
         $html .= '</tr>';
 
-        if ($upsResponse->getShipment()->getShipmentType()) {
-            $shipmentType = $upsResponse->getShipment()->getShipmentType();
+        $shipment = $upsResponse->getShipment();
+
+        if ($shipment->getShipmentType()) {
+            $shipmentType = $shipment->getShipmentType();
 
             $html .= '<tr>';
             $html .= '<td>Type</td>';
@@ -209,8 +208,8 @@ class ContactForm
             $html .= '</tr>';
         }
 
-        if ($upsResponse->getShipment()->getShipmentWeight()) {
-            $shipmentWeight = $upsResponse->getShipment()->getShipmentWeight();
+        if ($shipment->getShipmentWeight()) {
+            $shipmentWeight = $shipment->getShipmentWeight();
 
             $html .= '<tr>';
             $html .= '<td>Weight</td>';
@@ -218,8 +217,8 @@ class ContactForm
             $html .= '</tr>';
         }
 
-        if ($upsResponse->getShipment()->getCurrentStatus()) {
-            $currentStatus = $upsResponse->getShipment()->getCurrentStatus();
+        if ($shipment->getCurrentStatus()) {
+            $currentStatus = $shipment->getCurrentStatus();
 
             $html .= '<tr>';
             $html .= '<td>Status</td>';
@@ -227,8 +226,8 @@ class ContactForm
             $html .= '</tr>';
         }
 
-        if ($upsResponse->getShipment()->getPickupDate()) {
-            $pickupDate = $upsResponse->getShipment()->getPickupDate();
+        if ($shipment->getPickupDate()) {
+            $pickupDate = $shipment->getPickupDate();
 
             $html .= '<tr>';
             $html .= '<td>Pickup Date</td>';
@@ -236,8 +235,8 @@ class ContactForm
             $html .= '</tr>';
         }
 
-        if ($upsResponse->getShipment()->getService()) {
-            $service = $upsResponse->getShipment()->getService();
+        if ($shipment->getService()) {
+            $service = $shipment->getService();
 
             $html .= '<tr>';
             $html .= '<td>Service '.$service->getCode().'</td>';
@@ -246,42 +245,43 @@ class ContactForm
         }
 
         // Package
-        if ($upsResponse->getShipment()->getPackage()) {
+        if ($shipment->getPackages()) {
             $html .= '<tr>';
             $html .= '<td colspan="2"><strong>Package</strong></td>';
             $html .= '</tr>';
 
-            $package = $upsResponse->getShipment()->getPackage();
+            $packages = $shipment->getPackages();
 
-            $html .= '<tr>';
-            $html .= '<td>Tracking Number</td>';
-            $html .= '<td>'.$package->getTrackingNumber().'</td>';
-            $html .= '</tr>';
-
-            if ($upsResponse->getShipment()->getPackage()->getActivities()) {
-                $activities = $upsResponse->getShipment()->getPackage()->getActivities();
-
+            foreach ($packages as $package) {
                 $html .= '<tr>';
-                $html .= '<td colspan="2">';
-
-                $html .= '<table class="ups-package-activities">';
-                $html .= '<tr>';
-                $html .= '<td>Date</td><td>Description</td><td>Location</td>';
+                $html .= '<td>Tracking Number</td>';
+                $html .= '<td>' . $package->getTrackingNumber() . '</td>';
                 $html .= '</tr>';
 
-                foreach ($activities as $activity) {
+                if ($package->getActivities()) {
+                    $activities = $package->getActivities();
+
                     $html .= '<tr>';
-                    $html .= '<td>' . $activity->getDate() . ' ' . $activity->getTime() . '</td>';
-                    $html .= '<td>' . $activity->getStatus()->getDescription() . '</td>';
-                    $html .= '<td>' . $activity->getLocation() . '</td>';
+                    $html .= '<td colspan="2">';
+
+                    $html .= '<table class="ups-package-activities">';
+                    $html .= '<tr>';
+                    $html .= '<td>Date</td><td>Description</td><td>Location</td>';
+                    $html .= '</tr>';
+
+                    foreach ($activities as $activity) {
+                        $html .= '<tr>';
+                        $html .= '<td>' . $activity->getDate() . ' ' . $activity->getTime() . '</td>';
+                        $html .= '<td>' . $activity->getStatus()->getDescription() . '</td>';
+                        $html .= '<td>' . $activity->getLocation() . '</td>';
+                        $html .= '</tr>';
+                    }
+
+                    $html .= '</table>';
+
+                    $html .= '</td>';
                     $html .= '</tr>';
                 }
-
-                $html .= '</table>';
-
-                $html .= '</td>';
-                $html .= '</tr>';
-
             }
         }
 

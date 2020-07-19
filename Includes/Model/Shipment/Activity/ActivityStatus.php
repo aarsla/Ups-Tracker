@@ -10,7 +10,7 @@ final class ActivityStatus
     private ?string $code;
     private ?string $description;
 
-    private function __construct(string $type, string $code, string $description)
+    private function __construct(?string $type, ?string $code, ?string $description)
     {
         $this->type = $type;
         $this->code = $code;
