@@ -11,6 +11,11 @@ final class Address
     private ?string $postalCode;
     private ?string $countryCode;
 
+    public function __toString(): string
+    {
+        return $this->city . ' ' . $this->stateProvinceCode . ' ' . $this->postalCode . ' ' . $this->countryCode;
+    }
+
     private function __construct(?string $city, ?string $stateProvinceCode, ?string $postalCode, ?string $countryCode)
     {
         $this->city = $city;

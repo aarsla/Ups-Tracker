@@ -254,6 +254,40 @@ class ContactForm
             $html .= '</tr>';
         }
 
+        if ($shipment->getReferenceNumber()) {
+            $referenceNumber = $shipment->getReferenceNumber();
+
+            $html .= '<tr>';
+            $html .= '<td>Ref. No. '.$referenceNumber->getCode().'</td>';
+            $html .= '<td>'.$referenceNumber->getValue().'</td>';
+            $html .= '</tr>';
+        }
+
+        if ($shipment->getShipperNumber()) {
+            $hipperNumber = $shipment->getShipperNumber();
+
+            $html .= '<tr>';
+            $html .= '<td>Shipper No.</td>';
+            $html .= '<td>'.$hipperNumber.'</td>';
+            $html .= '</tr>';
+        }
+
+        // Shipment Activity
+        if ($shipment->getActivities() !== null) {
+            $html .= '<tr>';
+            $html .= '<td colspan="2">Activities</td>';
+            $html .= '</tr>';
+
+            $activities = $shipment->getActivities();
+//            echo 'type: ' . (gettype($activities)) . '<p></p>';
+
+            $html .= '<tr>';
+            $html .= '<td colspan="2">';
+            $html .= $this->getActivitiesTable($activities);
+            $html .= '</td>';
+            $html .= '</tr>';
+        }
+
         // Package
         if ($shipment->getPackages()) {
             $html .= '<tr>';
@@ -269,26 +303,15 @@ class ContactForm
                 $html .= '</tr>';
 
                 if ($package->getActivities()) {
+                    $html .= '<tr>';
+                    $html .= '<td colspan="2">Activities</td>';
+                    $html .= '</tr>';
+
                     $activities = $package->getActivities();
 
                     $html .= '<tr>';
                     $html .= '<td colspan="2">';
-
-                    $html .= '<table class="ups-package-activities">';
-                    $html .= '<tr>';
-                    $html .= '<td>Date</td><td>Description</td><td>Location</td>';
-                    $html .= '</tr>';
-
-                    foreach ($activities as $activity) {
-                        $html .= '<tr>';
-                        $html .= '<td>' . $activity->getDate() . ' ' . $activity->getTime() . '</td>';
-                        $html .= '<td>' . $activity->getStatus()->getDescription() . '</td>';
-                        $html .= '<td>' . $activity->getLocation() . '</td>';
-                        $html .= '</tr>';
-                    }
-
-                    $html .= '</table>';
-
+                    $html .= $this->getActivitiesTable($activities);
                     $html .= '</td>';
                     $html .= '</tr>';
                 }
@@ -323,6 +346,52 @@ class ContactForm
         $html .= '<td>'.$status->getCode().'</td>';
         $html .= '<td>'.$status->getDescription().'</td>';
         $html .= '</tr>';
+
+        $html .= '</table>';
+
+        return $html;
+    }
+
+    private function getActivitiesTable(array $activities): string {
+        $html = '<table class="ups-package-activities">';
+
+        foreach ($activities as $activity) {
+            $dateTime = 'Date/Time: ' .$activity->getDate() . ' ' . $activity->getTime();
+            if ($activity->getTrailer()) {
+                $dateTime .= ' ['.$activity->getTrailer().']';
+            }
+
+            $html .= '<tr>';
+            $html .= '<td colspan="2">' . $dateTime . '</td>';
+            $html .= '</tr>';
+
+            if ($activity->getDescription()) {
+                $description = $activity->getDescription();
+
+                $html .= '<tr>';
+                $html .= '<td colspan="2">' . $description . '</td>';
+                $html .= '</tr>';
+            }
+
+            if ($activity->getActivityStatus()) {
+                $activityStatus = $activity->getActivityStatus();
+
+                $html .= '<tr>';
+                $html .= '<td colspan="2">' . $activityStatus->getDescription() . '</td>';
+                $html .= '</tr>';
+            }
+
+            if ($activity->getActivityLocations()) {
+                $activityLocations = $activity->getActivityLocations();
+                foreach ($activityLocations as $activityLocation) {
+                    $html .= '<tr>';
+                    $html .= '<td colspan="2">' . $activityLocation . '</td>';
+                    $html .= '</tr>';
+                }
+            }
+
+            $html .= '<tr><td colspan="2"></td></tr>';
+        }
 
         $html .= '</table>';
 

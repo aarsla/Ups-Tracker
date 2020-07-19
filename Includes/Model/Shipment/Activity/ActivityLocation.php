@@ -4,47 +4,79 @@ declare(strict_types=1);
 
 namespace UpsTracking\Includes\Model\Shipment\Activity;
 
+use UpsTracking\Includes\Model\Shipment\Package;
+
 final class ActivityLocation
 {
     private ?Address $address;
     private ?string $code;
+    private ?string $city;
+    private ?string $stateProvinceCode;
     private ?string $description;
     private ?string $signedForByName;
 
     public function __toString(): string
     {
-        return $this->code . ' ' . $this->description;
+        if ($this->address) {
+            return $this->code . ' ' . $this->description . ' ' . $this->address;
+        }
+
+        if ($this->city || $this->stateProvinceCode) {
+            return $this->city . ' ' . $this->stateProvinceCode;
+        }
+
+        return 'Unknown location';
     }
 
-    private function __construct(?Address $address, ?string $code, ?string $description, ?string $signedForByName)
+    private function __construct(
+        ?Address $address,
+        ?string $code,
+        ?string $city,
+        ?string $description,
+        ?string $signedForByName,
+        ?string $stateProvinceCode
+    )
     {
         $this->address = $address;
         $this->code = $code;
+        $this->city = $city;
         $this->description = $description;
         $this->signedForByName = $signedForByName;
+        $this->stateProvinceCode = $stateProvinceCode;
     }
 
-    public static function fromNullableArray(?array $activityLocation): ?ActivityLocation
+    public static function fromNullableArray(?array $activityLocations): ?array
     {
-        if (!is_array($activityLocation)) {
+        if (!is_array($activityLocations)) {
             return null;
         }
 
-        return ActivityLocation::fromArray($activityLocation);
+        $array = [];
+
+        if (isset($activityLocations[0])) {
+            foreach ($activityLocations as $activityLocation) {
+                $array[] = ActivityLocation::fromArray($activityLocation);
+            }
+        } else {
+            $array[] = ActivityLocation::fromArray($activityLocations);
+        }
+
+        return empty($array) ? null : $array;
     }
 
     private static function fromArray(array $activityLocation): ?ActivityLocation {
-//        $address = isset($activityLocation['Address']) ? Address::fromNullableArray($activityLocation['Address']) : null;
         $address = Address::fromNullableArray(ActivityLocation::arrayOrNull($activityLocation, 'Address'));
         $code = isset($activityLocation['Code']) ? $activityLocation['Code'] : null;
+        $city = isset($activityLocation['City']) ? $activityLocation['City'] : null;
         $description = isset($activityLocation['Description']) ? $activityLocation['Description'] : null;
         $signedForByName = isset($activityLocation['SignedForByName']) ? $activityLocation['SignedForByName'] : null;
+        $stateProvinceCode = isset($activityLocation['StateProvinceCode']) ? $activityLocation['StateProvinceCode'] : null;
 
-        if (!$address && !$code && !$description && !$description && !$signedForByName) {
+        if (!$address && !$code && !$city && !$description && !$description && !$signedForByName && !$stateProvinceCode) {
             return null;
         }
 
-        return new ActivityLocation($address, $code, $description, $signedForByName);
+        return new ActivityLocation($address, $code, $city, $description, $signedForByName, $stateProvinceCode);
     }
 
     private static function arrayOrNull(array $array, string $index): ?array {
@@ -73,6 +105,22 @@ final class ActivityLocation
     public function getCode(): ?string
     {
         return $this->code;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStateProvinceCode(): ?string
+    {
+        return $this->stateProvinceCode;
     }
 
     /**

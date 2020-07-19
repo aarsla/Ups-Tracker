@@ -6,19 +6,27 @@ namespace UpsTracking\Includes\Model\Shipment\Activity;
 
 final class Activity
 {
-    private ?ActivityLocation $location;
-    private ?ActivityStatus $status;
+    private ?array $activityLocations;
+    private ?ActivityStatus $activityStatus;
     private ?string $description;
     private ?string $date;
     private ?string $time;
+    private ?string $trailer;
 
-    private function __construct(?ActivityLocation $location, ?ActivityStatus $status, ?string $description, ?string $date, ?string $time)
+    private function __construct(
+        ?array $activityLocations,
+        ?ActivityStatus $activityStatus,
+        ?string $description,
+        ?string $date,
+        ?string $time,
+        ?string $trailer)
     {
-        $this->location = $location;
-        $this->status = $status;
+        $this->activityLocations = $activityLocations;
+        $this->activityStatus = $activityStatus;
         $this->description = $description;
         $this->date = $date;
         $this->time = $time;
+        $this->trailer = $trailer;
     }
 
     public static function fromNullableArray(?array $activities): ?array
@@ -41,17 +49,18 @@ final class Activity
     }
 
     private static function fromArray(array $activity): ?Activity {
-        $location = ActivityLocation::fromNullableArray(Activity::arrayOrNull($activity, 'ActivityLocation'));
-        $status = ActivityStatus::fromNullableArray(Activity::arrayOrNull($activity, 'Status'));
+        $activityLocations = ActivityLocation::fromNullableArray(Activity::arrayOrNull($activity, 'ActivityLocation'));
+        $activityStatus = ActivityStatus::fromNullableArray(Activity::arrayOrNull($activity, 'Status'));
         $description = isset($activity['Description']) ? $activity['Description'] : null;
         $date = isset($activity['Date']) ? $activity['Date'] : null;
         $time = isset($activity['Time']) ? $activity['Time'] : null;
+        $trailer = isset($activity['Trailer']) ? $activity['Trailer'] : null;
 
-        if (!$location && !$status && !$description && !$date && !$time) {
+        if (!$activityLocations && !$activityStatus && !$description && !$date && !$time && !$trailer) {
             return null;
         }
 
-        return new Activity($location, $status, $description, $date, $time);
+        return new Activity($activityLocations, $activityStatus, $description, $date, $time, $trailer);
     }
 
     private static function arrayOrNull(array $array, string $index): ?array {
@@ -67,19 +76,19 @@ final class Activity
     }
 
     /**
-     * @return ActivityLocation|null
+     * @return ActivityLocation[]|null
      */
-    public function getLocation(): ?ActivityLocation
+    public function getActivityLocations(): ?array
     {
-        return $this->location;
+        return $this->activityLocations;
     }
 
     /**
      * @return ActivityStatus|null
      */
-    public function getStatus(): ?ActivityStatus
+    public function getActivityStatus(): ?ActivityStatus
     {
-        return $this->status;
+        return $this->activityStatus;
     }
 
     /**
@@ -106,4 +115,11 @@ final class Activity
         return $this->time;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getTrailer(): ?string
+    {
+        return $this->trailer;
+    }
 }

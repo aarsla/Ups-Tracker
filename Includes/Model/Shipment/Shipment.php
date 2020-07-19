@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace UpsTracking\Includes\Model\Shipment;
 
+use UpsTracking\Includes\Model\Shipment\Activity\Activity;
+
 final class Shipment
 {
     private ?InquiryNumber $inquiryNumber;
@@ -12,6 +14,9 @@ final class Shipment
     private ?ShipmentWeight $shipmentWeight;
     private ?string $pickupDate;
     private ?Service $service;
+    private ?ReferenceNumber $referenceNumber;
+    private ?string $shipperNumber;
+    private ?array $activities;
     private ?array $packages;
 
     private function __construct(
@@ -21,6 +26,9 @@ final class Shipment
         ?ShipmentWeight $shipmentWeight,
         ?string $pickupDate,
         ?Service $service,
+        ?ReferenceNumber $referenceNumber,
+        ?string $shipperNumber,
+        ?array $activities,
         ?array $packages
     )
     {
@@ -30,6 +38,9 @@ final class Shipment
         $this->shipmentWeight = $shipmentWeight;
         $this->pickupDate = $pickupDate;
         $this->service = $service;
+        $this->referenceNumber = $referenceNumber;
+        $this->shipperNumber = $shipperNumber;
+        $this->activities = $activities;
         $this->packages = $packages;
     }
 
@@ -40,6 +51,9 @@ final class Shipment
         $shipmentWeight = ShipmentWeight::fromNullableArray(Shipment::arrayOrNull($shipping, 'ShipmentWeight'));
         $pickupDate = Shipment::valueOrNull($shipping, 'PickupDate');
         $service = Service::fromNullableArray(Shipment::arrayOrNull($shipping, 'Service'));
+        $referenceNumber = ReferenceNumber::fromNullableArray(Shipment::arrayOrNull($shipping, 'ReferenceNumber'));
+        $shipperNumber = Shipment::valueOrNull($shipping, 'ShipperNumber');
+        $activities = Activity::fromNullableArray(Shipment::arrayOrNull($shipping, 'Activity'));
         $packages = Package::fromNullableArray(Shipment::arrayOrNull($shipping, 'Package'));
 
         return new Shipment(
@@ -49,6 +63,9 @@ final class Shipment
             $shipmentWeight,
             $pickupDate,
             $service,
+            $referenceNumber,
+            $shipperNumber,
+            $activities,
             $packages
         );
     }
@@ -128,6 +145,30 @@ final class Shipment
     public function getService(): ?Service
     {
         return $this->service;
+    }
+
+    /**
+     * @return ReferenceNumber|null
+     */
+    public function getReferenceNumber(): ?ReferenceNumber
+    {
+        return $this->referenceNumber;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getShipperNumber(): ?string
+    {
+        return $this->shipperNumber;
+    }
+
+    /**
+     * @return Activity[]|null
+     */
+    public function getActivities(): ?array
+    {
+        return $this->activities;
     }
 
     /**
