@@ -378,6 +378,11 @@ class Settings
     public function getDebug(): bool
     {
         $this->generalOptions = $this->getGeneralOptions();
+
+        if (!isset($this->generalOptions[$this->debugId])) {
+            return false;
+        }
+
         return (bool)$this->generalOptions[$this->debugId];
     }
 

@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace UpsTracking\Includes\Model\Shipment\Activity;
 
-use UpsTracking\Includes\Model\Shipment\Activity\ActivityLocation\ActivityStatus;
-
 final class Activity
 {
+    private ?ActivityLocation $location;
     private ?ActivityStatus $status;
     private ?string $description;
     private ?string $date;
     private ?string $time;
 
-    private function __construct(?ActivityStatus $status, ?string $description, ?string $date, ?string $time)
+    private function __construct(?ActivityLocation $location, ?ActivityStatus $status, ?string $description, ?string $date, ?string $time)
     {
+        $this->location = $location;
         $this->status = $status;
         $this->description = $description;
         $this->date = $date;
@@ -41,16 +41,37 @@ final class Activity
     }
 
     private static function fromArray(array $activity): ?Activity {
-        $status = ActivityStatus::fromNullableArray($activity['Status']);
+        $location = ActivityLocation::fromNullableArray(Activity::arrayOrNull($activity, 'ActivityLocation'));
+        $status = ActivityStatus::fromNullableArray(Activity::arrayOrNull($activity, 'Status'));
         $description = isset($activity['Description']) ? $activity['Description'] : null;
         $date = isset($activity['Date']) ? $activity['Date'] : null;
         $time = isset($activity['Time']) ? $activity['Time'] : null;
 
-        if (!$status && $description && !$date && !$time) {
+        if (!$location && !$status && !$description && !$date && !$time) {
             return null;
         }
 
-        return new Activity($status, $description, $date, $time);
+        return new Activity($location, $status, $description, $date, $time);
+    }
+
+    private static function arrayOrNull(array $array, string $index): ?array {
+        if (!is_array($array)) {
+            return null;
+        }
+
+        if (!array_key_exists($index, $array)) {
+            return null;
+        }
+
+        return $array[$index];
+    }
+
+    /**
+     * @return ActivityLocation|null
+     */
+    public function getLocation(): ?ActivityLocation
+    {
+        return $this->location;
     }
 
     /**

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UpsTracking\Includes\Model\Shipment\Activity\ActivityLocation;
+namespace UpsTracking\Includes\Model\Shipment\Activity;
 
 final class Address
 {
@@ -11,7 +11,7 @@ final class Address
     private ?string $postalCode;
     private ?string $countryCode;
 
-    private function __construct(string $city, string $stateProvinceCode, string $postalCode, string $countryCode)
+    private function __construct(?string $city, ?string $stateProvinceCode, ?string $postalCode, ?string $countryCode)
     {
         $this->city = $city;
         $this->stateProvinceCode = $stateProvinceCode;
@@ -28,11 +28,15 @@ final class Address
         return Address::fromArray($address);
     }
 
-    private static function fromArray(array $address): Address {
-        $city = $address['City'] ? $address['City'] : null;
-        $stateProvinceCode = $address['StateProvinceCode'] ? $address['StateProvinceCode'] : null;
-        $postalCode = $address['PostalCode'] ? $address['PostalCode'] : null;
-        $countryCode = $address['CountryCode'] ? $address['CountryCode'] : null;
+    private static function fromArray(array $address): ?Address {
+        $city = isset($address['City']) ? $address['City'] : null;
+        $stateProvinceCode = isset($address['StateProvinceCode']) ? $address['StateProvinceCode'] : null;
+        $postalCode = isset($address['PostalCode']) ? $address['PostalCode'] : null;
+        $countryCode = isset($address['CountryCode']) ? $address['CountryCode'] : null;
+
+        if (!$city && !$stateProvinceCode && !$postalCode && !$countryCode) {
+            return null;
+        }
 
         return new Address($city, $stateProvinceCode, $postalCode, $countryCode);
     }

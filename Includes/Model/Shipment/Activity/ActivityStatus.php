@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UpsTracking\Includes\Model\Shipment\Activity\ActivityLocation;
+namespace UpsTracking\Includes\Model\Shipment\Activity;
 
 final class ActivityStatus
 {

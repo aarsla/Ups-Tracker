@@ -11,7 +11,7 @@ final class UPS
     private ResponseStatus $responseStatus;
     private Shipment $shipment;
 //    private array $packages;
-    private string $disclaimer;
+    private ?string $disclaimer;
     private ?ResponseStatus $fault = null;
 
     /**
@@ -38,7 +38,7 @@ final class UPS
 //            }
 //        }
 
-        $this->disclaimer = $trackResponse['Disclaimer'];
+        $this->disclaimer = $trackResponse['Disclaimer'] ?: null;
     }
 
     public static function fromJsonString(string $response): UPS {

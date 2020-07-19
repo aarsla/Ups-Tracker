@@ -245,22 +245,6 @@ class ContactForm
             $html .= '</tr>';
         }
 
-//
-//        $html .= '<tr>';
-//        $html .= '<td>Shipper number</td>';
-//        $html .= '<td>'.$shipment['ShipperNumber'].'</td>';
-//        $html .= '</tr>';
-//
-//        $html .= '<tr>';
-//        $html .= '<td>Shipment service</td>';
-//        $html .= '<td>'.$shipment['Service']['Description'].'</td>';
-//        $html .= '</tr>';
-//
-//        $html .= '<tr>';
-//        $html .= '<td>Shipment reference number</td>';
-//        $html .= '<td>'.$shipment['ReferenceNumber']['Value'].'</td>';
-//        $html .= '</tr>';
-
         // Package
         if ($upsResponse->getShipment()->getPackage()) {
             $html .= '<tr>';
@@ -282,14 +266,14 @@ class ContactForm
 
                 $html .= '<table class="ups-package-activities">';
                 $html .= '<tr>';
-                $html .= '<td>Date</td><td>Time</td><td>Description</td>';
+                $html .= '<td>Date</td><td>Description</td><td>Location</td>';
                 $html .= '</tr>';
 
                 foreach ($activities as $activity) {
                     $html .= '<tr>';
-                    $html .= '<td>' . $activity->getDate() . '</td>';
-                    $html .= '<td>' . $activity->getTime() . '</td>';
+                    $html .= '<td>' . $activity->getDate() . ' ' . $activity->getTime() . '</td>';
                     $html .= '<td>' . $activity->getStatus()->getDescription() . '</td>';
+                    $html .= '<td>' . $activity->getLocation() . '</td>';
                     $html .= '</tr>';
                 }
 
@@ -301,44 +285,16 @@ class ContactForm
             }
         }
 
-//        foreach ($packages as $package) {
-//
-//            $html .= '<tr>';
-//            $html .= '<td colspan="2"><strong>Package</strong></td>';
-//            $html .= '</tr>';
-//
-//            if ($package['TrackingNumber']) {
-//                $html .= '<tr>';
-//                $html .= '<td>Tracking number</td>';
-//                $html .= '<td>' . $package['TrackingNumber'] . '</td>';
-//                $html .= '</tr>';
-//            }
-//
-//            // Activity
-//            if ($package['Activity']) {
-//                $html .= '<tr>';
-//                $html .= '<td colspan="2"><strong>Activities</strong></td>';
-//                $html .= '</tr>';
-//
-//                if (gettype($package['Activity']) === 'array') {
-//                    foreach ($package['Activity'] as $activity) {
-//                        $html .= '<tr>';
-//                        $html .= '<td>' . $activity['Date'] . ' / ' . $activity['Time'] . '</td>';
-//                        $html .= '<td>' . $activity['Description'] . '</td>';
-//                        $html .= '</tr>';
-//                    }
-//                }
-//            }
-//        }
-
         // Disclaimer
-        $html .= '<tr>';
-        $html .= '<td colspan="2"><strong>Disclaimer</strong></td>';
-        $html .= '</tr>';
+        if ($upsResponse->getDisclaimer()) {
+            $html .= '<tr>';
+            $html .= '<td colspan="2"><strong>Disclaimer</strong></td>';
+            $html .= '</tr>';
 
-        $html .= '<tr>';
-        $html .= '<td colspan="2">'.$upsResponse->getDisclaimer().'</td>';
-        $html .= '</tr>';
+            $html .= '<tr>';
+            $html .= '<td colspan="2">' . $upsResponse->getDisclaimer() . '</td>';
+            $html .= '</tr>';
+        }
 
         $html .= '</table>';
 
