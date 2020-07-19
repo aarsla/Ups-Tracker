@@ -6,7 +6,7 @@ namespace UpsTracking\Includes\Model\Shipment;
 
 final class Shipment
 {
-    private InquiryNumber $inquiryNumber;
+    private ?InquiryNumber $inquiryNumber;
     private ?ShipmentType $shipmentType;
     private ?CurrentStatus $currentStatus;
     private ?ShipmentWeight $shipmentWeight;
@@ -15,7 +15,7 @@ final class Shipment
     private ?array $packages;
 
     private function __construct(
-        InquiryNumber $inquiryNumber,
+        ?InquiryNumber $inquiryNumber,
         ?ShipmentType $shipmentType,
         ?CurrentStatus $currentStatus,
         ?ShipmentWeight $shipmentWeight,
@@ -34,7 +34,7 @@ final class Shipment
     }
 
     public static function fromResponse(array $shipping): Shipment {
-        $inquiryNumber = InquiryNumber::fromArray($shipping['InquiryNumber']);
+        $inquiryNumber = InquiryNumber::fromNullableArray(Shipment::arrayOrNull($shipping, 'InquiryNumber'));
         $shipmentType = ShipmentType::fromNullableArray(Shipment::arrayOrNull($shipping, 'ShipmentType'));
         $currentStatus = CurrentStatus::fromNullableArray(Shipment::arrayOrNull($shipping, 'CurrentStatus'));
         $shipmentWeight = ShipmentWeight::fromNullableArray(Shipment::arrayOrNull($shipping, 'ShipmentWeight'));
@@ -62,6 +62,10 @@ final class Shipment
             return null;
         }
 
+        if (!is_array($array[$index])) {
+            return null;
+        }
+
         return $array[$index];
     }
 
@@ -79,9 +83,9 @@ final class Shipment
     }
 
         /**
-     * @return InquiryNumber
+     * @return InquiryNumber|null
      */
-    public function getInquiryNumber(): InquiryNumber
+    public function getInquiryNumber(): ?InquiryNumber
     {
         return $this->inquiryNumber;
     }

@@ -199,6 +199,16 @@ class ContactForm
 
         $shipment = $upsResponse->getShipment();
 
+        if ($shipment->getInquiryNumber()) {
+            $inquiryNumber = $shipment->getInquiryNumber();
+
+            $html .= '<tr>';
+            $html .= '<td>Inquiry Number</td>';
+//            $html .= '<td>'.$inquiryNumber->getDescription().'</td>';
+            $html .= '<td>'.$inquiryNumber->getValue().'</td>';
+            $html .= '</tr>';
+        }
+
         if ($shipment->getShipmentType()) {
             $shipmentType = $shipment->getShipmentType();
 
