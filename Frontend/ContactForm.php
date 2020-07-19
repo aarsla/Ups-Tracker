@@ -207,7 +207,6 @@ class ContactForm
 
             $html .= '<tr>';
             $html .= '<td>Inquiry Number</td>';
-//            $html .= '<td>'.$inquiryNumber->getDescription().'</td>';
             $html .= '<td>'.$inquiryNumber->getValue().'</td>';
             $html .= '</tr>';
         }
@@ -282,7 +281,6 @@ class ContactForm
             $html .= '</tr>';
 
             $activities = $shipment->getActivities();
-//            echo 'type: ' . (gettype($activities)) . '<p></p>';
 
             $html .= '<tr>';
             $html .= '<td colspan="2">';
