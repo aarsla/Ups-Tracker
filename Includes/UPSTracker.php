@@ -16,23 +16,23 @@ if (!defined('ABSPATH')) exit;
  * @subpackage UpsTracking/Includes
  * @author     Your Name <email@example.com>
  */
-class UPSTracker
+final class UPSTracker
 {
-    public static function getUpsTracking(string $inquiryNumber) {
+    public static function getUpsTracking(string $inquiryNumber, bool $asJson = true) {
         $params = UPSTracker::queryOptions($inquiryNumber);
         $jsonEncodedParams = json_encode($params);
 
         $response = UPSTracker::sendRequest($jsonEncodedParams);
-        $decodedResponse = json_decode($response, true, 512,  JSON_OBJECT_AS_ARRAY);
 
-        return $decodedResponse;
+        if (!$asJson) {
+            return $response;
+        }
+
+        return json_decode($response, true, 512,  JSON_OBJECT_AS_ARRAY);
     }
 
-    public static function testFixture(string $fixtureName) {
-        $response = file_get_contents(dirname(__FILE__).'/../Fixtures/'.$fixtureName.'.json', true);
-        $decodedResponse = json_decode($response, true, 512,  JSON_OBJECT_AS_ARRAY);
-
-        return $decodedResponse;
+    public static function testFixture(string $fixtureName): string {
+        return file_get_contents(dirname(__FILE__).'/../Fixtures/'.$fixtureName.'.json', true);
     }
 
     private static function queryOptions(string $inquiryNumber, bool $jsonEncode = false): array {

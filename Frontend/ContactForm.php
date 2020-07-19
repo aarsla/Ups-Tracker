@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UpsTracking\Frontend;
 
 // If this file is called directly, abort.
+use UpsTracking\Includes\Model\UPS;
 use UpsTracking\Includes\UPSTracker;
 
 if (!defined('ABSPATH')) exit;
@@ -156,18 +157,17 @@ class ContactForm
                 $inquiryNumber = $_POST["inquiryNumber"];
 
                 // Process the data.
-                $response = UPSTracker::getUpsTracking($inquiryNumber);
-//                $response = UPSTracker::testFixture('1Z12345E0205271688');
+//                $response = UPSTracker::getUpsTracking($inquiryNumber);
+                $response = UPSTracker::testFixture($inquiryNumber);
+                $upsResponse = UPS::fromJsonString($response);
 
-                if ($response['Fault']) {
-                    $faultResponse = $response['Fault'];
-                    $formattedResponse = $this->formatError($faultResponse);
+                if ($upsResponse->getFault()) {
+                    $formattedResponse = $this->formatErrorResponse($upsResponse);
                     echo $formattedResponse;
                     return;
                 }
 
-                $trackResponse = $response['TrackResponse'];
-                $formattedResponse = $this->formatResponse($trackResponse);
+                $formattedResponse = $this->formatResponse($upsResponse);
                 echo $formattedResponse;
             }
             else
@@ -177,23 +177,21 @@ class ContactForm
         }
     }
 
-    private function formatResponse($trackResponse): string
+    private function formatResponse(UPS $upsResponse): string
     {
         $html = '<table>';
-        $html .= '<th>Status</th>';
-        $html .= '<th>Response</th>';
 
-        $response = $trackResponse['Response'];
-        $responseStatus = $response['ResponseStatus'];
-
-        $shipment = $trackResponse['Shipment'];
-        $packages = $trackResponse['Shipment']['Package'];
-        $disclaimer = $trackResponse['Disclaimer'];
+//        $shipment = $upsResponse->getShipment();
+//        $packages = $upsResponse->getPackages();
 
         // Response
         $html .= '<tr>';
-        $html .= '<td>Response status</td>';
-        $html .= '<td>'.$responseStatus['Description'].'</td>';
+        $html .= '<td colspan="2"><strong>Status</strong></td>';
+        $html .= '</tr>';
+
+        $html .= '<tr>';
+        $html .= '<td>Status</td>';
+        $html .= '<td>Code: '. $upsResponse->getResponseStatus()->getCode().' - '.$upsResponse->getResponseStatus()->getDescription().'</td>';
         $html .= '</tr>';
 
         // Shipment
@@ -201,62 +199,74 @@ class ContactForm
         $html .= '<td colspan="2"><strong>Shipment</strong></td>';
         $html .= '</tr>';
 
-        $html .= '<tr>';
-        $html .= '<td>Shipment type</td>';
-        $html .= '<td>'.$shipment['ShipmentType']['Description'].'</td>';
-        $html .= '</tr>';
+        if ($upsResponse->getShipment()->getShipmentType()) {
+            $shipmentType = $upsResponse->getShipment()->getShipmentType();
 
-        $html .= '<tr>';
-        $html .= '<td>Shipper number</td>';
-        $html .= '<td>'.$shipment['ShipperNumber'].'</td>';
-        $html .= '</tr>';
-
-        $html .= '<tr>';
-        $html .= '<td>Shipment service</td>';
-        $html .= '<td>'.$shipment['Service']['Description'].'</td>';
-        $html .= '</tr>';
-
-        $html .= '<tr>';
-        $html .= '<td>Shipment reference number</td>';
-        $html .= '<td>'.$shipment['ReferenceNumber']['Value'].'</td>';
-        $html .= '</tr>';
-
-        $html .= '<tr>';
-        $html .= '<td>Pickup date</td>';
-        $html .= '<td>'.$shipment['PickupDate'].'</td>';
-        $html .= '</tr>';
-
-        // Package
-        foreach ($packages as $package) {
             $html .= '<tr>';
-            $html .= '<td colspan="2"><strong>Package</strong></td>';
+            $html .= '<td>Shipment type</td>';
+            $html .= '<td>'.$shipmentType->getDescription().'</td>';
             $html .= '</tr>';
-
-            if ($package['TrackingNumber']) {
-                $html .= '<tr>';
-                $html .= '<td>Tracking number</td>';
-                $html .= '<td>' . $package['TrackingNumber'] . '</td>';
-                $html .= '</tr>';
-            }
-
-            // Activity
-            if ($package['Activity']) {
-                $html .= '<tr>';
-                $html .= '<td colspan="2"><strong>Activities</strong></td>';
-                $html .= '</tr>';
-
-                foreach($package['Activity'] as $key=>$value){
-                    echo $key . "=>" . $value . "<br>";
-                }
-
-                foreach ($package['Activity'] as $activity) {
-                    $html .= '<tr>';
-                    $html .= '<td>' . $activity['Date'] . ' / ' . $activity['Time'] . '</td>';
-                    $html .= '<td>' . $activity['Status']['Description'] . '</td>';
-                    $html .= '</tr>';
-                }
-            }
         }
+
+        if ($upsResponse->getShipment()->getCurrentStatus()) {
+            $currentStatus = $upsResponse->getShipment()->getCurrentStatus();
+
+            $html .= '<tr>';
+            $html .= '<td>Current status</td>';
+            $html .= '<td>'.$currentStatus->getDescription().'</td>';
+            $html .= '</tr>';
+        }
+//
+//        $html .= '<tr>';
+//        $html .= '<td>Shipper number</td>';
+//        $html .= '<td>'.$shipment['ShipperNumber'].'</td>';
+//        $html .= '</tr>';
+//
+//        $html .= '<tr>';
+//        $html .= '<td>Shipment service</td>';
+//        $html .= '<td>'.$shipment['Service']['Description'].'</td>';
+//        $html .= '</tr>';
+//
+//        $html .= '<tr>';
+//        $html .= '<td>Shipment reference number</td>';
+//        $html .= '<td>'.$shipment['ReferenceNumber']['Value'].'</td>';
+//        $html .= '</tr>';
+//
+//        $html .= '<tr>';
+//        $html .= '<td>Pickup date</td>';
+//        $html .= '<td>'.$shipment['PickupDate'].'</td>';
+//        $html .= '</tr>';
+//
+//        // Package
+//        foreach ($packages as $package) {
+//
+//            $html .= '<tr>';
+//            $html .= '<td colspan="2"><strong>Package</strong></td>';
+//            $html .= '</tr>';
+//
+//            if ($package['TrackingNumber']) {
+//                $html .= '<tr>';
+//                $html .= '<td>Tracking number</td>';
+//                $html .= '<td>' . $package['TrackingNumber'] . '</td>';
+//                $html .= '</tr>';
+//            }
+//
+//            // Activity
+//            if ($package['Activity']) {
+//                $html .= '<tr>';
+//                $html .= '<td colspan="2"><strong>Activities</strong></td>';
+//                $html .= '</tr>';
+//
+//                if (gettype($package['Activity']) === 'array') {
+//                    foreach ($package['Activity'] as $activity) {
+//                        $html .= '<tr>';
+//                        $html .= '<td>' . $activity['Date'] . ' / ' . $activity['Time'] . '</td>';
+//                        $html .= '<td>' . $activity['Description'] . '</td>';
+//                        $html .= '</tr>';
+//                    }
+//                }
+//            }
+//        }
 
         // Disclaimer
         $html .= '<tr>';
@@ -264,7 +274,7 @@ class ContactForm
         $html .= '</tr>';
 
         $html .= '<tr>';
-        $html .= '<td colspan="2">'.$disclaimer.'</td>';
+        $html .= '<td colspan="2">'.$upsResponse->getDisclaimer().'</td>';
         $html .= '</tr>';
 
         $html .= '</table>';
@@ -272,23 +282,18 @@ class ContactForm
         return $html;
     }
 
-    private function formatError($faultResponse): string
+    private function formatErrorResponse(UPS $upsResponse): string
     {
+        $status = $upsResponse->getFault();
+
         $html = '<table>';
         $html .= '<th>Error Code</th>';
         $html .= '<th>Description</th>';
 
-        $errors = $faultResponse['detail']['Errors'];
-
-        // Errors
-        foreach ($errors as $error) {
-            $primaryErrorCode = $error['PrimaryErrorCode'];
-
-            $html .= '<tr>';
-            $html .= '<td>'.$primaryErrorCode['Code'].'</td>';
-            $html .= '<td>'.$primaryErrorCode['Description'].'</td>';
-            $html .= '</tr>';
-        }
+        $html .= '<tr>';
+        $html .= '<td>'.$status->getCode().'</td>';
+        $html .= '<td>'.$status->getDescription().'</td>';
+        $html .= '</tr>';
 
         $html .= '</table>';
 
