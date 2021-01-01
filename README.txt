@@ -1,5 +1,5 @@
 === UPS Tracker ===
-Tags: ups, tracking
+Tags: ups, tracking, wordpress, plugin
 Requires at least: 3.0.1
 Tested up to: 5.6
 Requires PHP: 7.4

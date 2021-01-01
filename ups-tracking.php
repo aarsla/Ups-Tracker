@@ -1,17 +1,17 @@
 <?php
 
 /**
- * @link              http://byte-logic.com
+ * @link              https://byte-logic.com
  * @since             1.0.0
  * @package           UpsTracking
  *
  * @wordpress-plugin
  * Plugin Name:       UPS Tracking
- * Plugin URI:        http://byte-logic.com
+ * Plugin URI:        https://byte-logic.com
  * Description:       UPS Tracking for WordPress
  * Version:           1.0.0
  * Author:            Byte Logic
- * Author URI:        http://byte-logic.com
+ * Author URI:        https://byte-logic.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       ups-tracking
