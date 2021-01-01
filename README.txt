@@ -8,10 +8,10 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
 Tracking UPS packages.
- 
+
 == Description ==
  
-Requires access to UPS API.
+Requires UPS API credentials.
 
 == Installation ==
  
@@ -24,15 +24,23 @@ This section describes how to install the plugin and get it working.
 
 == Frequently Asked Questions ==
  
-= Where do I get UPS API access from? =
+= Where do I get UPS API credentials from? =
  
 https://www.ups.com/upsdeveloperkit
+
+= How do I modify output? =
+
+Check Frontend/ContactForm.php formatResponse() method
 
 == Screenshots ==
  
 1. Query Form
 2. API Response
 3. Plugin Settings
+
+== Repo ==
+
+https://github.com/aarsla/Ups-Tracker
 
 == Changelog ==
  
