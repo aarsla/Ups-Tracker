@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @link              https://byte-logic.com
+ * @link              https://github.com/aarsla/Ups-Tracker
  * @since             1.0.0
  * @package           UpsTracking
  *
  * @wordpress-plugin
  * Plugin Name:       UPS Tracking
- * Plugin URI:        https://byte-logic.com
+ * Plugin URI:        https://github.com/aarsla/Ups-Tracker
  * Description:       UPS Tracking for WordPress
  * Version:           1.0.0
  * Author:            Byte Logic

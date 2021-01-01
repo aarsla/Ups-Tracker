@@ -17,7 +17,7 @@ UPS API credentials: https://www.ups.com/upsdeveloperkit
 
 ## Frequently Asked Questions
  
-#### Where do I get UPS API access from?
+#### Where do I get API credentials from?
  
 https://www.ups.com/upsdeveloperkit
 
