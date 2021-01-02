@@ -6,9 +6,9 @@
  * @package           UpsTracking
  *
  * @wordpress-plugin
- * Plugin Name:       UPS Tracking
+ * Plugin Name:       Tracking for UPS
  * Plugin URI:        https://github.com/aarsla/Ups-Tracker
- * Description:       UPS Tracking for WordPress
+ * Description:       Tracking for UPS WordPress Plugin
  * Version:           1.0.0
  * Author:            Byte Logic
  * Author URI:        https://byte-logic.com
