@@ -1,4 +1,4 @@
-=== UPS Tracker ===
+=== Tracking for UPS ===
 Tags: ups, tracking, wordpress, plugin
 Requires at least: 3.0.1
 Tested up to: 5.6
@@ -17,7 +17,7 @@ Requires UPS API credentials.
  
 This section describes how to install the plugin and get it working.
 
-1. Upload `Ups Tracker` folder to the `/wp-content/plugins/` directory
+1. Upload `Tracking for UPS` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Add your settings through Ups Tracking settings menu
 4. Add `[ups-tracking-form]` shortcode to any page

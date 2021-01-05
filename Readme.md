@@ -1,4 +1,4 @@
-# UPS Tracker 
+# Tracking for UPS
  
 ## Description
 
@@ -10,7 +10,7 @@ UPS API credentials: https://www.ups.com/upsdeveloperkit
 
 ## Installation
  
-1. Upload `Ups Tracker` folder to the `/wp-content/plugins/` directory
+1. Upload `Tracking for UPS` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Add your credentials through Ups Tracking settings menu
 4. Add `[ups-tracking-form]` shortcode to any page
