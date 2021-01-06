@@ -12,16 +12,15 @@ if (!defined('ABSPATH')) exit;
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       http://example.com
+ * @link       https://github.com/aarsla/Ups-Tracker
  * @since      1.0.0
- *
  *
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    UpsTracking
- * @subpackage UpsTracking/Admin
- * @author     Your Name <email@example.com>
+ * @package    Ups-Tracker
+ * @subpackage Ups-Tracker/Admin
+ * @author     Aid Arslanagic <aarsla@gmail.com>
  */
 class Admin
 {

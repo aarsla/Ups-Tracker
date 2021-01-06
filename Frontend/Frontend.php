@@ -15,12 +15,11 @@ if (!defined('ABSPATH')) exit;
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the frontend stylesheet and JavaScript.
  *
- * @link       http://example.com
+ * @link       https://github.com/aarsla/Ups-Tracker
  * @since      1.0.0
- *
- * @package    UpsTracking
- * @subpackage UpsTracking/Frontend
- * @author     Your Name <email@example.com>
+ * @package    Ups-Tracker
+ * @subpackage Ups-Tracker/Frontend
+ * @author     Aid Arslanagic <aarsla@gmail.com>
  */
 class Frontend
 {
