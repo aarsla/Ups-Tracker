@@ -3,7 +3,7 @@
 /**
  * @link              https://github.com/aarsla/Ups-Tracker
  * @since             1.0.0
- * @package           UpsTracking
+ * @package           Ups-Tracker
  *
  * @wordpress-plugin
  * Plugin Name:       Tracking for UPS

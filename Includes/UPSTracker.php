@@ -1,90 +1,90 @@
 <?php
 
-declare(strict_types=1);
+declare( strict_types=1 );
 
 namespace UpsTracking\Includes;
 
 // If this file is called directly, abort.
-if (!defined('ABSPATH')) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Define the UPS Tracking functionality.
  *
- * @link       http://example.com
+ * @link       https://github.com/aarsla/Ups-Tracker
  * @since      1.0.0
- * @package    UpsTracking
- * @subpackage UpsTracking/Includes
- * @author     Your Name <email@example.com>
+ * @package    Ups-Tracker
+ * @subpackage Ups-Tracker/Includes
+ * @author     Aid Arslanagic <aarsla@gmail.com>
  */
-final class UPSTracker
-{
-    public static function getUpsTracking(string $inquiryNumber, bool $asJson = true) {
-        $params = UPSTracker::queryOptions($inquiryNumber);
-        $jsonEncodedParams = json_encode($params);
+final class UPSTracker {
+	public static function getUpsTracking( string $inquiryNumber, bool $asJson = true ) {
+		$params            = UPSTracker::queryOptions( $inquiryNumber );
+		$jsonEncodedParams = wp_json_encode( $params );
 
-        $response = UPSTracker::sendRequest($jsonEncodedParams);
+		$response = UPSTracker::sendRequest( $jsonEncodedParams );
 
-        if (!$asJson) {
-            return $response;
-        }
+		if ( ! $asJson ) {
+			return $response;
+		}
 
-        return json_decode($response, true, 512,  JSON_OBJECT_AS_ARRAY);
-    }
+		return json_decode( $response, true, 512, JSON_OBJECT_AS_ARRAY );
+	}
 
-    public static function testFixture(string $fixtureName): string {
-        return file_get_contents(dirname(__FILE__).'/../Fixtures/'.$fixtureName.'.json', true);
-    }
+	public static function testFixture( string $fixtureName ): string {
+		return file_get_contents( dirname( __FILE__ ) . '/../Fixtures/' . $fixtureName . '.json', true );
+	}
 
-    private static function queryOptions(string $inquiryNumber, bool $jsonEncode = false): array {
-        $upsTrackingOptions = get_option('ups-tracking-general');
+	private static function queryOptions( string $inquiryNumber, bool $jsonEncode = false ): array {
+		$upsTrackingOptions = get_option( 'ups-tracking-general' );
 
-        return [
-            'UPSSecurity' => [
-                'UsernameToken' => [
-                    'Username' => $upsTrackingOptions['user-id-tx'],
-                    'Password' => $upsTrackingOptions['password-tx'],
-                ],
-                'ServiceAccessToken' => [
-                    'AccessLicenseNumber' => $upsTrackingOptions['license-key-tx'],
-                ]
-            ],
-            'TrackRequest' => [
-                'Request' => [
-                    'RequestOption' => 1,
-                    'TransactionReference' => [
-                        'CustomerContext' => 'Test 001'
-                    ]
-                ],
-                'InquiryNumber' => $inquiryNumber
-            ]
-        ];
-    }
+		return [
+			'UPSSecurity'  => [
+				'UsernameToken'      => [
+					'Username' => $upsTrackingOptions['user-id-tx'],
+					'Password' => $upsTrackingOptions['password-tx'],
+				],
+				'ServiceAccessToken' => [
+					'AccessLicenseNumber' => $upsTrackingOptions['license-key-tx'],
+				]
+			],
+			'TrackRequest' => [
+				'Request'       => [
+					'RequestOption'        => 1,
+					'TransactionReference' => [
+						'CustomerContext' => 'Test 001'
+					]
+				],
+				'InquiryNumber' => $inquiryNumber
+			]
+		];
+	}
 
-    private static function sendRequest(string $jsonEncodedParams): string {
-        $upsTrackingOptions = get_option('ups-tracking-general');
-        $url = $upsTrackingOptions['endpoint-url-tx'];
+	private static function sendRequest( string $jsonEncodedParams ): string {
+		$upsTrackingOptions = get_option( 'ups-tracking-general' );
+		$url                = $upsTrackingOptions['endpoint-url-tx'];
 
-        $headers = [];
-        $headers[] = 'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept';
-        $headers[] = 'Access-Control-Allow-Methods: POST';
-        $headers[] = 'Access-Control-Allow-Origin: *';
-        $headers[] = 'Content-Type: application/json';
-        $headers[] = 'Content-Length: ' . strlen($jsonEncodedParams);
+		$response = wp_remote_post( $url, [
+			'timeout' => 45,
+			'headers' => [
+				'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept',
+				'Access-Control-Allow-Methods: POST',
+				'Access-Control-Allow-Origin: *',
+				'Content-Type: application/json',
+				'Content-Length: ' . strlen( $jsonEncodedParams )
+			],
+			'body'    => $jsonEncodedParams
+		] );
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT,5);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 45);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonEncodedParams);
-        $response = curl_exec($ch);
+		if ( is_wp_error( $response ) || ! isset( $response['response'] ) || ! is_array( $response['response'] ) ) {
+			return '';
+		}
 
-        if ((curl_errno($ch)) && (curl_errno($ch) != 0)) {
-            $response = "::".curl_errno($ch)."::".curl_error($ch);
-        }
+		if ( is_wp_error( $response ) ) {
+			return 'ERROR: ' . $response->get_error_message();
+		}
 
-        return $response;
-    }
+		return $response['body'];
+	}
 }

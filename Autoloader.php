@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) exit;
  * @link https://www.php-fig.org/psr/psr-4/examples/ The code this autoloader is based upon.
  *
  * @since             1.0.0
- * @package           UpsTracking
+ * @package           Ups-Tracker
  *
  * @param   $className The fully-qualified class name.
  * @return void
