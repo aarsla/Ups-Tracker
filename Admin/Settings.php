@@ -13,8 +13,8 @@ if (!defined('ABSPATH')) exit;
  *
  * @since      1.0.0
  *
- * @package    UpsTracking
- * @subpackage UpsTracking/Admin
+ * @package    Ups-Tracker
+ * @subpackage Ups-Tracker/Admin
  */
 class Settings
 {
@@ -207,7 +207,7 @@ class Settings
 
             <h2><?php esc_html_e('Ups Tracking Options', 'ups-tracking'); ?></h2>
 
-            <?php $activeTab = isset($_GET['tab']) ? $_GET['tab'] : 'general_options'; ?>
+            <?php $activeTab = isset($_GET['tab']) ? esc_html($_GET['tab']) : 'general_options'; ?>
 
             <h2 class="nav-tab-wrapper">
 <!--                <a href="?page=--><?php //echo $this->menuSlug; ?><!--&tab=general_options" class="nav-tab --><?php //echo $activeTab === 'general_options' ? 'nav-tab-active' : ''; ?><!--">--><?php //esc_html_e('General', 'ups-tracking'); ?><!--</a>-->
