@@ -1,4 +1,6 @@
 === Tracking for UPS ===
+Contributors: w0ed
+Donate link: https://paypal.me/simpastudio
 Tags: ups, tracking, wordpress, plugin
 Requires at least: 3.0.1
 Tested up to: 5.6
@@ -7,7 +9,7 @@ Stable tag: 4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
-Tracking UPS packages.
+Wordpress plugin for tracking UPS packages using UPS API.
 
 == Description ==
  
@@ -19,7 +21,7 @@ This section describes how to install the plugin and get it working.
 
 1. Upload `Tracking for UPS` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Add your settings through Ups Tracking settings menu
+3. Add your UPS API credentials in plugin settings menu
 4. Add `[ups-tracking-form]` shortcode to any page
 
 == Frequently Asked Questions ==
