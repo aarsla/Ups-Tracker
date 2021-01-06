@@ -14,11 +14,11 @@ if (!defined('ABSPATH')) exit;
 /**
  * Contact form and Shortcode template.
  *
- * @link       http://example.com
+ * @link       https://github.com/aarsla/Ups-Tracker
  * @since      1.0.0
- * @package    UpsTracking
- * @subpackage UpsTracking/Includes
- * @author     Your Name <email@example.com>
+ * @package    Ups-Tracker
+ * @subpackage Ups-Tracker/Frontend
+ * @author     Aid Arslanagic <aarsla@gmail.com>
  */
 class ContactForm
 {
@@ -155,7 +155,7 @@ class ContactForm
             // Verify Nonce
             if (wp_verify_nonce($_POST['getFormHtml_nonce'], 'getFormHtml') !== false)
             {
-                $inquiryNumber = $_POST["inquiryNumber"];
+                $inquiryNumber = sanitize_text_field($_POST["inquiryNumber"]);
 
                 // Process the data.
                 $response = UPSTracker::getUpsTracking($inquiryNumber);
