@@ -44,7 +44,7 @@ define('UPS_TRACKING_VERSION', '1.0.0');
 /**
  * The string used to uniquely identify this plugin.
  */
-define('UPS_TRACKING_SLUG', 'ups-tracking');
+define('UPS_TRACKING_SLUG', plugin_dir_path(__FILE__));
 
 /**
  * Configuration data
