@@ -12,14 +12,13 @@ Whether you're receiving one package or shipping hundreds, UPS Tracking provides
 
 UPS Tracking offers several ways to track, and provides convenient ways to stay informed of current status, unexpected delays, and ultimately the delivery of your shipment.
 
-
 ## Requirements
 
 UPS API credentials: https://www.ups.com/upsdeveloperkit
 
 ## Installation
 
-1. Upload `Tracking for UPS` folder to the `/wp-content/plugins/` directory
+1. Upload `tracking-for-ups` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Add your credentials through Ups Tracking settings menu
 4. Add `[ups-tracking-form]` shortcode to any page
@@ -38,13 +37,13 @@ Check `Frontend/ContactForm.php` `formatResponse()` method
 
 ### Query Form
 
-![Query Form](https://raw.githubusercontent.com/aarsla/ups-tracker/master/assets/screenshot-1.png "Query Form")
+![Query Form](https://raw.githubusercontent.com/aarsla/tracking-for-ups/master/assets/screenshot-1.png "Query Form")
 
 ### API Response
 
-![API Response](https://raw.githubusercontent.com/aarsla/ups-tracker/master/assets/screenshot-2.png "API Response")
+![API Response](https://raw.githubusercontent.com/aarsla/tracking-for-ups/master/assets/screenshot-2.png "API Response")
 
 ### Plugin Settings
 
-![Plugin Settings](https://raw.githubusercontent.com/aarsla/ups-tracker/master/assets/screenshot-3.png "Plugin Settings")
+![Plugin Settings](https://raw.githubusercontent.com/aarsla/tracking-for-ups/master/assets/screenshot-3.png "Plugin Settings")
 
