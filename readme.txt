@@ -13,7 +13,13 @@ Wordpress plugin for tracking UPS packages using UPS API.
 
 == Description ==
  
-Requires UPS API credentials.
+Use your UPS InfoNotice® or tracking number to get the latest package status and estimated delivery date.
+
+**Get Tracking Information and Peace of Mind**
+
+Whether you're receiving one package or shipping hundreds, UPS Tracking provides insight about your shipment's status all along its journey. You'll feel confident and have peace of mind knowing that you have the most up-to-date information when you use our enhanced tracking options.
+
+UPS Tracking offers several ways to track, and provides convenient ways to stay informed of current status, unexpected delays, and ultimately the delivery of your shipment.
 
 == Installation ==
  
@@ -40,15 +46,21 @@ Check Frontend/ContactForm.php formatResponse() method
 2. API Response
 3. Plugin Settings
 
-== Repo ==
+== Github repository ==
 
-https://github.com/aarsla/Ups-Tracker
+https://github.com/aarsla/tracking-for-ups
 
 == Upgrade Notice ==
 
 Nothing to see here, move along...
 
 == Changelog ==
- 
+
+= 1.2 =
+* Updated Readme
+
+= 1.1 =
+* Config values fix
+
 = 1.0 =
 * First version.

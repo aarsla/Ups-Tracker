@@ -37,7 +37,7 @@ final class UPSTracker {
 	}
 
 	private static function queryOptions( string $inquiryNumber, bool $jsonEncode = false ): array {
-		$upsTrackingOptions = get_option( 'ups-tracking-general' );
+		$upsTrackingOptions = get_option( UPS_TRACKING_SLUG.'-general' );
 
 		return [
 			'UPSSecurity'  => [
@@ -62,7 +62,7 @@ final class UPSTracker {
 	}
 
 	private static function sendRequest( string $jsonEncodedParams ): string {
-		$upsTrackingOptions = get_option( 'ups-tracking-general' );
+		$upsTrackingOptions = get_option( UPS_TRACKING_SLUG.'-general' );
 		$url                = $upsTrackingOptions['endpoint-url-tx'];
 
 		$response = wp_remote_post( $url, [
