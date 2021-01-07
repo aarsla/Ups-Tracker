@@ -1,5 +1,5 @@
 === Tracking for UPS ===
-Contributors: w0ed
+Contributors: w03d
 Donate link: https://paypal.me/simpastudio
 Tags: ups, tracking, wordpress, plugin
 Requires at least: 3.0.1
@@ -43,6 +43,10 @@ Check Frontend/ContactForm.php formatResponse() method
 == Repo ==
 
 https://github.com/aarsla/Ups-Tracker
+
+== Upgrade Notice ==
+
+Nothing to see here, move along...
 
 == Changelog ==
  
