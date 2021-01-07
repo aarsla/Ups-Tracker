@@ -1,8 +1,17 @@
 # Tracking for UPS
 
+Wordpress plugin for tracking UPS packages.
+
 ## Description
 
-Wordpress plugin for tracking UPS packages.
+Use your UPS InfoNotice® or tracking number to get the latest package status and estimated delivery date.
+
+**Get Tracking Information and Peace of Mind**
+
+Whether you're receiving one package or shipping hundreds, UPS Tracking provides insight about your shipment's status all along its journey. You'll feel confident and have peace of mind knowing that you have the most up-to-date information when you use our enhanced tracking options.
+
+UPS Tracking offers several ways to track, and provides convenient ways to stay informed of current status, unexpected delays, and ultimately the delivery of your shipment.
+
 
 ## Requirements
 
