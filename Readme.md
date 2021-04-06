@@ -1,6 +1,7 @@
 # Tracking for UPS
 
 Wordpress plugin for tracking UPS packages.
+https://wordpress.org/plugins/tracking-for-ups/
 
 ## Description
 
